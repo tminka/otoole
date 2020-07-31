@@ -129,12 +129,14 @@ class DataPackageToDatafile(DataPackageTo):
         df : pandas.DataFrame
         parameter_name : str
         handle: TextIO
-        default : int
+        default : float
         """
         df = self._form_parameter(df, default)
-        handle.write("param default {} : {} :=\n".format(default, parameter_name))
-        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
-        handle.write(";\n")
+        if df.size > 0:
+            # Pyomo data file syntax: https://pyomo.readthedocs.io/en/stable/working_abstractmodels/data/datfiles.html
+            handle.write(f"param {parameter_name} default {default} :=\n")
+            df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
+            handle.write(";\n")
 
     def _write_set(self, df: pd.DataFrame, set_name, handle: TextIO):
         """Write set data to a GMPL datafile
