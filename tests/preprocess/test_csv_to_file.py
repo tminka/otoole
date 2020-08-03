@@ -86,7 +86,7 @@ class TestDataFrameWritingDatafile:
         convert._write_parameter(df, "test_parameter", stream, 0)
 
         stream.seek(0)
-        expected = ["param default 0 : test_parameter :=\n", ";\n"]
+        expected = ["param test_parameter default 0 :=\n", ";\n"]
         actual = stream.readlines()
 
         for actual_line, expected_line in zip(actual, expected):
@@ -98,13 +98,13 @@ class TestDataFrameWritingDatafile:
 
         df = pd.DataFrame(data=data, columns=["REGION", "FUEL", "VALUE"])
 
-        stream = io.StringIO()
+        stream = io.StringIO(newline=None)
         convert = setup
         convert._write_parameter(df, "test_parameter", stream, 0)
 
         stream.seek(0)
         expected = [
-            "param default 0 : test_parameter :=\n",
+            "param test_parameter default 0 :=\n",
             "SIMPLICITY BIOMASS 0.95969\n",
             "SIMPLICITY ETH1 4.69969\n",
             ";\n",
@@ -125,13 +125,13 @@ class TestDataFrameWritingDatafile:
 
         df = pd.DataFrame(data=data, columns=["REGION", "FUEL", "VALUE"])
 
-        stream = io.StringIO()
+        stream = io.StringIO(newline=None)
         convert = setup
         convert._write_parameter(df, "test_parameter", stream, -1)
 
         stream.seek(0)
         expected = [
-            "param default -1 : test_parameter :=\n",
+            "param test_parameter default -1 :=\n",
             "SIMPLICITY BIOMASS 0.95969\n",
             "SIMPLICITY ETH1 4.69969\n",
             ";\n",
@@ -147,7 +147,7 @@ class TestDataFrameWritingDatafile:
 
         df = pd.DataFrame(data=data, columns=["VALUE"])
 
-        stream = io.StringIO()
+        stream = io.StringIO(newline=None)
         convert = setup
         convert._write_set(df, "TECHNOLOGY", stream)
 

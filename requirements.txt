@@ -8,3 +8,4 @@ pandas_datapackage_reader
 pydot
 pyyaml
 xlrd
+docutils<0.16

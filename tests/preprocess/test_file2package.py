@@ -75,7 +75,7 @@ param VariableCost default 0.0001 :=
             ["SIMPLICITY", "GAS_EXTRACTION", 2, 2014, 999999.0],
         ],
         columns=["REGION", "TECHNOLOGY", "MODE_OF_OPERATION", "YEAR", "VALUE"],
-    )
+    ).astype({'REGION': 'str', 'TECHNOLOGY': 'str', 'MODE_OF_OPERATION': 'int', 'YEAR': 'int', 'VALUE': 'float'})
 
     pd.testing.assert_frame_equal(actual["VariableCost"], expected)
 
