@@ -91,3 +91,9 @@ first need to install the package in *develop mode*::
 Now, all changes made in the codebase will automatically be reflected
 in the installed Python version accessible on the command line or from
 importing otoole modules into other Python packages.
+
+Changes should be tested by running pytest.  This requires installing some additional packages.
+
+    pip install -r requirements.txt
+    pip install pytest-cov
+    pytest

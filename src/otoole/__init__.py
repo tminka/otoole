@@ -4,6 +4,7 @@ import os
 from yaml import SafeLoader, load
 from datapackage import Package
 from sqlalchemy import create_engine
+from typing import Dict, List
 
 try:
     import importlib.resources as resources
@@ -59,3 +60,21 @@ def read_datapackage(filepath: str, sql: bool = False):
         package = Package(filepath)
 
     return package
+
+def read_config(path_to_user_config: str = None) -> Dict:
+    """Reads the config file holding expected OSeMOSYS set and parameter dimensions
+
+    Arguments
+    ---------
+    path_to_user_config : str, optional, default=None
+        Optional path to a user defined configuration file
+
+    Returns
+    -------
+    dict
+    """
+    if path_to_user_config:
+        config = read_packaged_file(path_to_user_config, None)
+    else:
+        config = read_packaged_file("config.yaml", "otoole.preprocess")
+    return config

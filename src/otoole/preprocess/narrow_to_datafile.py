@@ -8,7 +8,7 @@ from datapackage import Package
 from pandas_datapackage_reader import read_datapackage
 from sqlalchemy import create_engine
 
-from otoole import read_packaged_file
+from otoole import read_config
 from otoole.preprocess.excel_to_osemosys import CSV_TO_EXCEL
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,6 @@ class DataPackageTo(object):
         self.sql = sql
         self.package = self._get_package()
         self.default_values = self._get_default_values()
-        self.config = read_packaged_file("config.yaml", "otoole.preprocess")
 
     def _get_package(self):
 
@@ -107,6 +106,10 @@ class DataPackageToDatafile(DataPackageTo):
     """Write datapackage to a GMPL datafile
     """
 
+    def __init__(self, datapackage: str, datafilepath: str, sql: bool = False, skipEmpty: bool = False):
+        super().__init__(datapackage, datafilepath, sql)
+        self.skipEmpty = skipEmpty
+
     def _header(self):
         filepath = open(self.datafilepath, "w")
         msg = "# Model file written by *otoole*\n"
@@ -132,11 +135,13 @@ class DataPackageToDatafile(DataPackageTo):
         default : float
         """
         df = self._form_parameter(df, default)
-        if df.size > 0:
-            # Pyomo data file syntax: https://pyomo.readthedocs.io/en/stable/working_abstractmodels/data/datfiles.html
-            handle.write(f"param {parameter_name} default {default} :=\n")
-            df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
-            handle.write(";\n")
+        prefix = ''
+        if df.size == 0 and self.skipEmpty:
+            prefix = '#'
+        # Pyomo data file syntax: https://pyomo.readthedocs.io/en/stable/working_abstractmodels/data/datfiles.html
+        handle.write(f"{prefix}param {parameter_name} default {default} :=\n")
+        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
+        handle.write(f"{prefix};\n")
 
     def _write_set(self, df: pd.DataFrame, set_name, handle: TextIO):
         """Write set data to a GMPL datafile
@@ -231,8 +236,9 @@ class DataPackageToExcel(DataPackageTo):
         handle.close()
 
 
-def convert_datapackage_to_datafile(path_to_datapackage, path_to_datafile):
+def convert_datapackage_to_datafile(path_to_datapackage, path_to_datafile, skipEmpty = False):
     dp = DataPackageToDatafile(path_to_datapackage, path_to_datafile)
+    dp.skipEmpty = skipEmpty
     dp.convert()
 
 

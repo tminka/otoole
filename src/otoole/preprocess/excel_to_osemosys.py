@@ -190,7 +190,6 @@ from typing import Dict, List
 
 import xlrd
 
-from otoole import read_packaged_file
 from otoole.preprocess.longify_data import main as longify
 
 logger = logging.getLogger(__name__)
@@ -206,26 +205,6 @@ EXCEL_TO_CSV = {
 }
 
 CSV_TO_EXCEL = {v: k for k, v in EXCEL_TO_CSV.items()}
-
-
-def read_config(path_to_user_config: str = None) -> Dict:
-    """Reads the config file holding expected OSeMOSYS set and parameter dimensions
-
-    Arguments
-    ---------
-    path_to_user_config : str, optional, default=None
-        Optional path to a user defined configuration file
-
-    Returns
-    -------
-    dict
-    """
-    if path_to_user_config:
-        config = read_packaged_file(path_to_user_config, None)
-    else:
-        config = read_packaged_file("config.yaml", "otoole.preprocess")
-    return config
-
 
 def generate_csv_from_excel(input_workbook, output_folder):
     """Generate a folder of narrow, well formatted CSV files from a spreadsheet

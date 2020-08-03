@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 from pandas_datapackage_reader import read_datapackage
 
-from otoole import read_packaged_file
+from otoole import read_packaged_file, read_config
 from otoole.preprocess import read_datafile_to_dict
 from otoole.results.result_package import ResultsPackage
 
@@ -249,7 +249,7 @@ def convert_dataframe_to_csv(
                                 0  SIMPLICITY  2015  187.01576
                                 1  SIMPLICITY  2016  183.30788}
     """
-    input_config = read_packaged_file("config.yaml", "otoole.preprocess")
+    input_config = read_config()
     results_config = read_packaged_file("config.yaml", "otoole.results")
 
     sets = {x: y for x, y in input_config.items() if y["type"] == "set"}

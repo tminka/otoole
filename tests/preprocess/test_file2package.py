@@ -114,3 +114,12 @@ def test_load_sets():
     actual = load_parameter_definitions(config)
     expected = "set TestSet;\n"
     assert actual == expected
+
+#def test_convert_utopia():
+#    from otoole.preprocess.datafile_to_datapackage import convert_file_to_package
+#    convert_file_to_package(r'OSeMOSYS\Training_Case_Studies\utopia.txt', r'output\utopia', r'config_2013_05_10.yaml')
+
+#if __name__ == '__main__':
+#    import logging
+#    logging.basicConfig(level=logging.DEBUG)
+#    test_convert_utopia()

@@ -7,7 +7,7 @@ from typing import Dict
 
 import pandas as pd
 
-from otoole import read_packaged_file
+from otoole import read_config
 
 logger = logging.getLogger()
 
@@ -135,7 +135,7 @@ def main(output_folder: str, narrow_folder: str):
         The destination folder
 
     """
-    config = read_packaged_file("config.yaml", "otoole.preprocess")
+    config = read_config()
 
     for parameter, details in config.items():
         logger.info("Looking for %s", parameter)

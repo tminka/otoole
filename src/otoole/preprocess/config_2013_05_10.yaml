@@ -230,6 +230,11 @@ TechnologyToStorage:
     type: param
     dtype: float
     default: 0
+TechWithCapacityNeededToMeetPeakTS:
+    indices: [REGION,TECHNOLOGY]
+    type: param
+    dtype: float
+    default: 0
 TIMESLICE:
     dtype: str
     type: set

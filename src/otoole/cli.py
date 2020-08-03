@@ -127,12 +127,11 @@ def conversion_matrix(args):
     )
 
     if args.from_format == "datafile":
-
         if args.to_format == "datapackage":
-            convert_file_to_package(args.from_path, args.to_path)
-        if args.to_format == "excel":
+            convert_file_to_package(args.from_path, args.to_path, args.config)
+        elif args.to_format == "excel":
             with TemporaryDirectory() as temp_folder:
-                convert_file_to_package(args.from_path, temp_folder)
+                convert_file_to_package(args.from_path, temp_folder, args.config)
                 from_path = os.path.join(temp_folder, "datapackage.json")
                 convert_datapackage_to_excel(from_path, args.to_path)
         else:
@@ -158,7 +157,7 @@ def conversion_matrix(args):
 
     elif args.from_format == "csv":
         if args.to_format == "datapackage":
-            create_datapackage(args.from_path, args.to_path)
+            create_datapackage(args.from_path, args.to_path, args.config)
         else:
             raise NotImplementedError(msg)
 
@@ -252,6 +251,9 @@ def get_parser():
         "from_path", help="Path to file or folder to convert from"
     )
     convert_parser.add_argument("to_path", help="Path to file or folder to convert to")
+    convert_parser.add_argument(
+        "--config", help="Path to a user-defined validation-config file"
+    )
     convert_parser.set_defaults(func=conversion_matrix)
 
     # Parser for the CPLEX related commands
@@ -325,7 +327,7 @@ def main():
         if args.verbose:
             debug_hook(exception_type, exception, traceback)
         else:
-            print("{}: {}".format(exception_type.__name__, exception.message))
+            print(exception)
 
     sys.excepthook = exception_handler
 

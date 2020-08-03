@@ -10,7 +10,7 @@ import pandas as pd
 from amply import Amply
 from flatten_dict import flatten
 
-from otoole import read_packaged_file
+from otoole import read_packaged_file, read_config
 from otoole.preprocess.longify_data import (
     check_datatypes,
     check_set_datatype,
@@ -20,9 +20,9 @@ from otoole.preprocess.longify_data import (
 logger = logging.getLogger(__name__)
 
 
-def write_default_values(filepath):
+def write_default_values(filepath, path_to_config):
 
-    config = read_packaged_file("config.yaml", "otoole.preprocess")
+    config = read_config(path_to_config)
 
     default_values_path = os.path.join(filepath, "data", "default_values.csv")
     with open(default_values_path, "w") as csv_file:
@@ -33,7 +33,7 @@ def write_default_values(filepath):
                 csv_file.write("{},{}\n".format(name, contents["default"]))
 
 
-def convert_file_to_package(path_to_datafile: str, path_to_datapackage: str):
+def convert_file_to_package(path_to_datafile: str, path_to_datapackage: str, path_to_config: str = None):
     """Converts an OSeMOSYS datafile to a Tabular Data Package
 
     Arguments
@@ -43,7 +43,7 @@ def convert_file_to_package(path_to_datafile: str, path_to_datapackage: str):
         Path to the folder in which to write the new Tabular Data Package
 
     """
-    dict_of_dataframes = read_datafile_to_dict(path_to_datafile)
+    dict_of_dataframes = read_datafile_to_dict(path_to_datafile, path_to_config)
     if not os.path.exists(path_to_datapackage):
         os.mkdir(path_to_datapackage)
     for name, df in dict_of_dataframes.items():
@@ -52,17 +52,17 @@ def convert_file_to_package(path_to_datafile: str, path_to_datapackage: str):
     filepath = os.path.join(path_to_datapackage, "datapackage.json")
     with open(filepath, "w") as destination:
         destination.writelines(datapackage)
-    write_default_values(path_to_datapackage)
+    write_default_values(path_to_datapackage, path_to_config)
 
 
-def read_datafile_to_dict(path_to_datafile: str) -> Dict[str, pd.DataFrame]:
+def read_datafile_to_dict(path_to_datafile: str, path_to_config: str = None) -> Dict[str, pd.DataFrame]:
     """Reads in an OSeMOSYS GNUMathProg datafile into *otoole* format of choice
 
     Arguments
     ---------
     path_to_datafile: str
     """
-    config = read_packaged_file("config.yaml", "otoole.preprocess")  # type: Dict
+    config = read_config(path_to_config)  # type: Dict
     amply_datafile = read_in_datafile(path_to_datafile, config)
     return convert_amply_to_dataframe(amply_datafile, config)
 

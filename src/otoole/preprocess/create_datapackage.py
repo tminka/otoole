@@ -11,14 +11,14 @@ import sys
 from datapackage import Package
 from sqlalchemy import create_engine
 
-from otoole import read_packaged_file
+from otoole import read_config
 from otoole.preprocess.datafile_to_datapackage import write_default_values
 from otoole.preprocess.longify_data import main as longify
 
 logger = logging.getLogger()
 
 
-def generate_package(path_to_package):
+def generate_package(path_to_package, path_to_config = None):
     """Creates a datapackage in folder ``path_to_package``
 
     [{'fields': 'REGION', 'reference': {'resource': 'REGION', 'fields': 'VALUE'}}]
@@ -52,7 +52,7 @@ def generate_package(path_to_package):
 
     package.commit()
 
-    config = read_packaged_file("config.yaml", "otoole.preprocess")
+    config = read_config(path_to_config)
 
     new_resources = []
     for resource in package.resources:
@@ -99,9 +99,9 @@ def validate_contents(path_to_package):
             logger.warning("Validation error in %s: %s", resource.name, str(ex))
 
 
-def main(wide_folder, narrow_folder):
+def main(wide_folder, narrow_folder, path_to_config = None):
     longify(wide_folder, narrow_folder)
-    generate_package(narrow_folder)
+    generate_package(narrow_folder, path_to_config)
     absolute_path = os.path.join(narrow_folder, "datapackage.json")
     validate_contents(absolute_path)
 
