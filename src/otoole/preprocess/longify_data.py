@@ -183,7 +183,7 @@ def write_out_dataframe(folder, parameter, df):
     filepath = os.path.join(folder, "data", parameter + ".csv")
     with open(filepath, "w") as csvfile:
         logger.info("Writing %s rows into narrow file for %s", df.shape[0], parameter)
-        df.to_csv(csvfile, index=False)
+        df.to_csv(csvfile, index=False, line_terminator='\n')
 
 
 if __name__ == "__main__":

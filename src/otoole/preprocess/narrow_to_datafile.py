@@ -140,7 +140,7 @@ class DataPackageToDatafile(DataPackageTo):
             prefix = '#'
         # Pyomo data file syntax: https://pyomo.readthedocs.io/en/stable/working_abstractmodels/data/datfiles.html
         handle.write(f"{prefix}param {parameter_name} default {default} :=\n")
-        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
+        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False, line_terminator='\n')
         handle.write(f"{prefix};\n")
 
     def _write_set(self, df: pd.DataFrame, set_name, handle: TextIO):
@@ -153,7 +153,7 @@ class DataPackageToDatafile(DataPackageTo):
         handle: TextIO
         """
         handle.write("set {} :=\n".format(set_name))
-        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False)
+        df.to_csv(path_or_buf=handle, sep=" ", header=False, index=False, line_terminator='\n')
         handle.write(";\n")
 
     def _footer(self, handle: TextIO):
