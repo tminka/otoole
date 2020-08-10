@@ -59,7 +59,7 @@ class DataPackageTo(object):
         handle = self._header()
         logger.debug(self.default_values)
 
-        for name, df in self.package.items():
+        for name, df in sorted(self.package.items(), key=lambda kv: kv[0]):
             logger.debug(name)
 
             if df.empty:
