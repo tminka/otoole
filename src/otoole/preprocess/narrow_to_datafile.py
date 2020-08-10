@@ -41,7 +41,8 @@ class DataPackageTo(object):
             engine = create_engine("sqlite:///{}".format(self.datapackage))
             package = Package(storage="sql", engine=engine)
         else:
-            package = read_datapackage(self.datapackage)  # typing: datapackage.Package
+            # read_datapackage returns a dict of dataframes, not a Package
+            package = read_datapackage(self.datapackage)
 
         return package
 

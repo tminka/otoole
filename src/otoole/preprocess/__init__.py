@@ -4,7 +4,7 @@ from .narrow_to_datafile import (
     convert_datapackage_to_datafile,
     convert_datapackage_to_excel,
 )
-from .datafile_to_datapackage import convert_file_to_package, read_datafile_to_dict
+from .datafile_to_datapackage import convert_file_to_package, read_datafile_to_dict, write_default_values
 
 __all__ = [
     "generate_csv_from_excel",
@@ -15,4 +15,5 @@ __all__ = [
     "convert_datapackage_to_excel",
     "read_datafile_to_dict",
     "csv_to_datapackage",
+    "write_default_values"
 ]
